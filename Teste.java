@@ -34,41 +34,30 @@ public class Teste extends AdvancedRobot {
 	// quando achar um robo adversario
 	public void onScannedRobot(ScannedRobotEvent e) {
 		
-		listaRobosAchados.add(e);
-		
-		roboMenorDistancia = listaRobosAchados.get(i); // roboAlvo recebe o primeiro robo da lista, ele será o a escolha de menor custo da busca gulosa
-		
-		for(ScannedRobotEvent robo  : listaRobosAchados){
-			  System.out.println(i + " - " + listaRobosAchados.get(i));
-			  roboAtual = listaRobosAchados.get(i); // guarda o roboAtual do for
-			  
-			  if (roboMenorDistancia.getDistance() > roboAtual.getDistance() ){  // compara a energia do robô roboAlvo(anterior) com o roboAtual
-				  roboMenorDistancia = roboAtual;
-			  }
-		}
-		
-		execute();
-		
-		atirar(roboMenorDistancia);
-		
-//		if (e.getDistance() < 100) { // se a distanca for menor que 100 ele tá mto proximo
-//			if (e.getBearing() > -90 && e.getBearing() <= 90) {  // se ele estver do lado esquerdo
-//				back(40); // volta distancia de 40 para tras
-//			} else {
-//				ahead(40); // caminha distancia de 40 para frente
-//			}
-//		}
-		
-		
-		
-		
+		if(roboAtual == null){
+			roboAtual = e;
+			listaRobosAchados.add(e);
+		}else{
+
+			if(!listaRobosAchados.contains(e)){
+				listaRobosAchados.add(e);
+			}
+
+			for(ScannedRobotEvent robo  : listaRobosAchados){				
+				  if (roboAtual.getDistance() > robo.getDistance() ){
+					  roboAtual = robo;					  
+				  }
+			}
+		}	
+
+		setTurnRadarLeftRadians(getRadarTurnRemainingRadians());		
+		execute();		
+		atirar(roboAtual);		
 		
 	}
 	
 	public void atirar(ScannedRobotEvent e) {
 		
-
-		//	 	MOMENTO DO TIRO ABAIXOOOOOOOOOOOOOOOOOOOOOOOOO
 
 		// Calculate exact location of the robot
 		double absoluteBearing = getHeading() + e.getBearing();
@@ -93,8 +82,8 @@ public class Teste extends AdvancedRobot {
 		// are not turning.  Otherwise, scan is called automatically.
 		if (bearingFromGun == 0) {
 			scan();
-		}
-		
+		}	
+			
 	}
 	
 
@@ -104,4 +93,62 @@ public class Teste extends AdvancedRobot {
 	}
 
 	
+	public void onScannedRobot_lorena(ScannedRobotEvent e) {
+		
+		listaRobosAchados.add(e);
+	
+		
+		roboMenorDistancia = listaRobosAchados.get(i); // roboAlvo recebe o primeiro robo da lista, ele será o a escolha de menor custo da busca gulosa
+		
+		for(ScannedRobotEvent robo  : listaRobosAchados){
+			  System.out.println(i + " - " + listaRobosAchados.get(i));
+			  roboAtual = listaRobosAchados.get(i); // guarda o roboAtual do for
+			  
+			  if (roboMenorDistancia.getDistance() > roboAtual.getDistance() ){  // compara a energia do robô roboAlvo(anterior) com o roboAtual
+				  roboMenorDistancia = roboAtual;
+			  }
+		}
+		
+		execute();
+		
+		atirar(roboMenorDistancia);
+		
+//		if (e.getDistance() < 100) { // se a distanca for menor que 100 ele tá mto proximo
+//			if (e.getBearing() > -90 && e.getBearing() <= 90) {  // se ele estver do lado esquerdo
+//				back(40); // volta distancia de 40 para tras
+//			} else {
+//				ahead(40); // caminha distancia de 40 para frente
+//			}
+//		}
+	}
+
+	public void atirar_lorena(ScannedRobotEvent e) {
+			//	 	MOMENTO DO TIRO ABAIXOOOOOOOOOOOOOOOOOOOOOOOOO
+
+		// Calculate exact location of the robot
+		double absoluteBearing = getHeading() + e.getBearing();
+		double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());
+		
+		// If it's close enough, fire!
+		if (Math.abs(bearingFromGun) <= 3) {
+			turnGunRight(bearingFromGun);
+			// We check gun heat here, because calling fire()
+			// uses a turn, which could cause us to lose track
+			// of the other robot.
+			if (getGunHeat() == 0) {
+				fire(Math.min(3 - Math.abs(bearingFromGun), getEnergy() - .1));
+			}
+		} // otherwise just set the gun to turn.
+		// Note:  This will have no effect until we call scan()
+		else {
+			turnGunRight(bearingFromGun);
+		}
+		// Generates another scan event if we see a robot.
+		// We only need to call this if the gun (and therefore radar)
+		// are not turning.  Otherwise, scan is called automatically.
+		if (bearingFromGun == 0) {
+			scan();
+		}	
+	}
+
 }
