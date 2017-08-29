@@ -43,12 +43,13 @@ public class Teste extends AdvancedRobot {
 				listaRobosAchados.add(e);
 			}
 
-			if(roboAtual.getName().equals(e.getName()) && (roboAtual.getDistance() != e.getDistance()))
+			if(roboAtual.getName().equals(e.getName()) && 
+				((compararRobos(roboAtual, e) != 0)))
 			{
 				roboAtual = e;
 			}else{
-				for(ScannedRobotEvent robo  : listaRobosAchados){				
-				  if (roboAtual.getDistance() > robo.getDistance() ){
+				for(ScannedRobotEvent robo  : listaRobosAchados){									
+				  if (compararRobos(roboAtual, robo) == 1){
 					  roboAtual = robo;					  
 				  }
 				}
@@ -56,13 +57,26 @@ public class Teste extends AdvancedRobot {
 
 			
 		}	
-
+		//System.out.println(roboAtual.getDistance());
 		setTurnRadarLeftRadians(getRadarTurnRemainingRadians());		
 		execute();		
 		atirar(roboAtual);		
 		
 	}
 	
+	public int compararRobos(ScannedRobotEvent r1, ScannedRobotEvent r2){
+		System.out.println(r1.getName()+" - "+((r1.getDistance()/ 2) + r1.getEnergy()));
+		System.out.println(r2.getName()+" - "+((r2.getDistance()/ 2) + r2.getEnergy()));
+		if (((r1.getDistance()/ 2) + r1.getEnergy()) > ((r2.getDistance()/ 2) + r2.getEnergy())){
+			return 1;
+		}else if(((r1.getDistance()/ 2) + r1.getEnergy()) < ((r2.getDistance()/ 2) + r2.getEnergy()))
+		{
+			return 2;
+		}else{
+			return 0;
+		}
+	}
+
 	public void atirar(ScannedRobotEvent e) {
 		
 
