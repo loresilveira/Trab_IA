@@ -51,13 +51,13 @@ public class Teste extends AdvancedRobot {
 		
 		atirar(roboMenorDistancia);
 		
-		if (e.getDistance() < 100) { // se a distanca for menor que 100 ele tá mto proximo
-			if (e.getBearing() > -90 && e.getBearing() <= 90) {  // se ele estver do lado esquerdo
-				back(40); // volta distancia de 40 para tras
-			} else {
-				ahead(40); // caminha distancia de 40 para frente
-			}
-		}
+//		if (e.getDistance() < 100) { // se a distanca for menor que 100 ele tá mto proximo
+//			if (e.getBearing() > -90 && e.getBearing() <= 90) {  // se ele estver do lado esquerdo
+//				back(40); // volta distancia de 40 para tras
+//			} else {
+//				ahead(40); // caminha distancia de 40 para frente
+//			}
+//		}
 		
 		
 		
