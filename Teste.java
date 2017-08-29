@@ -8,21 +8,18 @@ import java.io.Writer;
 
 public class Teste extends AdvancedRobot {
 
-	int contador = 0;
-	double posicaoDeTiro; // posicao onde se deve atirar ou mover o robo
 	Random random = new Random(); 
 	ArrayList< ScannedRobotEvent > listaRobosAchados = new ArrayList< ScannedRobotEvent >();
 	ScannedRobotEvent roboMenorDistancia;
 	ScannedRobotEvent roboAtual;
-	int i = 0;
 	double moveDirection = 1;
+	boolean direcao = true;
 	
 	public void run() {
-
-		posicaoDeTiro = 10; // Inicializa posicaoDeTiro com angulo de 10
-
+		
 		while (true) { // enquanto nao achar alguem
 
+			movimento(90);
 			if (getRadarTurnRemaining() == 0.0) {
 				setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
 			}
@@ -67,40 +64,40 @@ public class Teste extends AdvancedRobot {
 	public int compararRobos(ScannedRobotEvent r1, ScannedRobotEvent r2){
 		// System.out.println(r1.getName()+" - "+((r1.getDistance()/ 2) + r1.getEnergy()));
 		// System.out.println(r2.getName()+" - "+((r2.getDistance()/ 2) + r2.getEnergy()));
-		if (((r1.getDistance()/ 2) + r1.getEnergy()) > ((r2.getDistance()/ 2) + r2.getEnergy())){
+		if (((r1.getDistance()) + r1.getEnergy()) > ((r2.getDistance()) + r2.getEnergy())){
 			return 1;
 		}else if(((r1.getDistance()/ 2) + r1.getEnergy()) < ((r2.getDistance()/ 2) + r2.getEnergy()))
 		{
 			return 2;
 		}else{
-			return 0;
+			if(r1.getEnergy() > r2.getEnergy()){
+				return 1;
+			}else if(r1.getEnergy() < r2.getEnergy()){
+				return 2;
+			}else{
+				return 0;
+			}			
+
 		}
 	}
 
-	public void atirar(ScannedRobotEvent e) {
-		
+	public void atirar(ScannedRobotEvent e) {		
 
-		// Calculate exact location of the robot
-		double absoluteBearing = getHeading() + e.getBearing();
-		double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());
 		
-		// If it's close enough, fire!
+		double absoluteBearing = getHeading() + e.getBearing();
+		double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());		
+		
 		if (Math.abs(bearingFromGun) <= 3) {
 			turnGunRight(bearingFromGun);
-			// We check gun heat here, because calling fire()
-			// uses a turn, which could cause us to lose track
-			// of the other robot.
+			
 			if (getGunHeat() == 0) {
 				fire(Math.min(3 - Math.abs(bearingFromGun), getEnergy() - .1));
 			}
-		} // otherwise just set the gun to turn.
-		// Note:  This will have no effect until we call scan()
+		} 		
 		else {
 			turnGunRight(bearingFromGun);
 		}
-		// Generates another scan event if we see a robot.
-		// We only need to call this if the gun (and therefore radar)
-		// are not turning.  Otherwise, scan is called automatically.
+		
 		if (bearingFromGun == 0) {
 			scan();
 		}	
@@ -108,75 +105,31 @@ public class Teste extends AdvancedRobot {
 	}
 
 	public void onHitByBullet(HitByBulletEvent e){
-		moveDirection *= -(double )(Math.random() * 1);;		
-		int random = (int )(Math.random() * 100 + 1000);
-		System.out.println(random +" - "+ moveDirection);
-		setAhead(random * moveDirection);	    
-	    execute();
+		direcao = !direcao;
+		movimento(180);
+	}
+
+	public void OnHitWall()
+	{
+		System.out.println("Bateu na parede!");
+		direcao = !direcao;
+		movimento(90);	
+	}
+
+	public void movimento(int valor){
+		if(direcao){
+			setAhead(Math.random()*1000);
+			setTurnLeft(Math.random()*valor);
+		}else{
+			setBack(Math.random()*1000);
+			setTurnRight(Math.random()*valor);	
+		}		
+		execute();		
 	}
 
 	public void onWin(WinEvent e) {
 		// Victory dance
 		turnRight(36000);
-	}
-
-	
-	public void onScannedRobot_lorena(ScannedRobotEvent e) {
-		
-		listaRobosAchados.add(e);
-	
-		
-		roboMenorDistancia = listaRobosAchados.get(i); // roboAlvo recebe o primeiro robo da lista, ele será o a escolha de menor custo da busca gulosa
-		
-		for(ScannedRobotEvent robo  : listaRobosAchados){
-			  System.out.println(i + " - " + listaRobosAchados.get(i));
-			  roboAtual = listaRobosAchados.get(i); // guarda o roboAtual do for
-			  
-			  if (roboMenorDistancia.getDistance() > roboAtual.getDistance() ){  // compara a energia do robô roboAlvo(anterior) com o roboAtual
-				  roboMenorDistancia = roboAtual;
-			  }
-		}
-		
-		execute();
-		
-		atirar(roboMenorDistancia);
-		
-//		if (e.getDistance() < 100) { // se a distanca for menor que 100 ele tá mto proximo
-//			if (e.getBearing() > -90 && e.getBearing() <= 90) {  // se ele estver do lado esquerdo
-//				back(40); // volta distancia de 40 para tras
-//			} else {
-//				ahead(40); // caminha distancia de 40 para frente
-//			}
-//		}
-	}
-
-	public void atirar_lorena(ScannedRobotEvent e) {
-			//	 	MOMENTO DO TIRO ABAIXOOOOOOOOOOOOOOOOOOOOOOOOO
-
-		// Calculate exact location of the robot
-		double absoluteBearing = getHeading() + e.getBearing();
-		double bearingFromGun = normalRelativeAngleDegrees(absoluteBearing - getGunHeading());
-		
-		// If it's close enough, fire!
-		if (Math.abs(bearingFromGun) <= 3) {
-			turnGunRight(bearingFromGun);
-			// We check gun heat here, because calling fire()
-			// uses a turn, which could cause us to lose track
-			// of the other robot.
-			if (getGunHeat() == 0) {
-				fire(Math.min(3 - Math.abs(bearingFromGun), getEnergy() - .1));
-			}
-		} // otherwise just set the gun to turn.
-		// Note:  This will have no effect until we call scan()
-		else {
-			turnGunRight(bearingFromGun);
-		}
-		// Generates another scan event if we see a robot.
-		// We only need to call this if the gun (and therefore radar)
-		// are not turning.  Otherwise, scan is called automatically.
-		if (bearingFromGun == 0) {
-			scan();
-		}	
 	}
 
 }
