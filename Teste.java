@@ -3,9 +3,8 @@ package Trab_IA;
 import static robocode.util.Utils.normalRelativeAngleDegrees;
 import java.util.Random;
 import java.util.ArrayList;
-import robocode.AdvancedRobot;
-import robocode.ScannedRobotEvent;
-import robocode.WinEvent;
+import robocode.*;
+import java.io.Writer;
 
 public class Teste extends AdvancedRobot {
 
@@ -16,6 +15,7 @@ public class Teste extends AdvancedRobot {
 	ScannedRobotEvent roboMenorDistancia;
 	ScannedRobotEvent roboAtual;
 	int i = 0;
+	double moveDirection = 1;
 	
 	public void run() {
 
@@ -65,8 +65,8 @@ public class Teste extends AdvancedRobot {
 	}
 	
 	public int compararRobos(ScannedRobotEvent r1, ScannedRobotEvent r2){
-		System.out.println(r1.getName()+" - "+((r1.getDistance()/ 2) + r1.getEnergy()));
-		System.out.println(r2.getName()+" - "+((r2.getDistance()/ 2) + r2.getEnergy()));
+		// System.out.println(r1.getName()+" - "+((r1.getDistance()/ 2) + r1.getEnergy()));
+		// System.out.println(r2.getName()+" - "+((r2.getDistance()/ 2) + r2.getEnergy()));
 		if (((r1.getDistance()/ 2) + r1.getEnergy()) > ((r2.getDistance()/ 2) + r2.getEnergy())){
 			return 1;
 		}else if(((r1.getDistance()/ 2) + r1.getEnergy()) < ((r2.getDistance()/ 2) + r2.getEnergy()))
@@ -106,7 +106,14 @@ public class Teste extends AdvancedRobot {
 		}	
 			
 	}
-	
+
+	public void onHitByBullet(HitByBulletEvent e){
+		moveDirection *= -(double )(Math.random() * 1);;		
+		int random = (int )(Math.random() * 100 + 1000);
+		System.out.println(random +" - "+ moveDirection);
+		setAhead(random * moveDirection);	    
+	    execute();
+	}
 
 	public void onWin(WinEvent e) {
 		// Victory dance
