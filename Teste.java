@@ -34,7 +34,6 @@ public class Teste extends AdvancedRobot {
 	// quando achar um robo adversario
 	public void onScannedRobot(ScannedRobotEvent e) {
 		
-<<<<<<< HEAD
 		if(roboAtual == null){
 			roboAtual = e;
 			listaRobosAchados.add(e);
@@ -98,9 +97,6 @@ public class Teste extends AdvancedRobot {
 		
 		listaRobosAchados.add(e);
 	
-=======
-		listaRobosAchados.add(e);
->>>>>>> caeb8897800dab48f0cc62025c088cb73589da6c
 		
 		roboMenorDistancia = listaRobosAchados.get(i); // roboAlvo recebe o primeiro robo da lista, ele será o a escolha de menor custo da busca gulosa
 		
@@ -124,24 +120,10 @@ public class Teste extends AdvancedRobot {
 //				ahead(40); // caminha distancia de 40 para frente
 //			}
 //		}
-<<<<<<< HEAD
 	}
 
 	public void atirar_lorena(ScannedRobotEvent e) {
 			//	 	MOMENTO DO TIRO ABAIXOOOOOOOOOOOOOOOOOOOOOOOOO
-=======
-		
-		
-		
-		
-		
-	}
-	
-	public void atirar(ScannedRobotEvent e) {
-		
-
-		//	 	MOMENTO DO TIRO ABAIXOOOOOOOOOOOOOOOOOOOOOOOOO
->>>>>>> caeb8897800dab48f0cc62025c088cb73589da6c
 
 		// Calculate exact location of the robot
 		double absoluteBearing = getHeading() + e.getBearing();
@@ -166,21 +148,7 @@ public class Teste extends AdvancedRobot {
 		// are not turning.  Otherwise, scan is called automatically.
 		if (bearingFromGun == 0) {
 			scan();
-<<<<<<< HEAD
 		}	
 	}
 
-=======
-		}
-		
-	}
-	
-
-	public void onWin(WinEvent e) {
-		// Victory dance
-		turnRight(36000);
-	}
-
-	
->>>>>>> caeb8897800dab48f0cc62025c088cb73589da6c
 }
