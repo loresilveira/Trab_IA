@@ -43,11 +43,18 @@ public class Teste extends AdvancedRobot {
 				listaRobosAchados.add(e);
 			}
 
-			for(ScannedRobotEvent robo  : listaRobosAchados){				
+			if(roboAtual.getName().equals(e.getName()) && (roboAtual.getDistance() != e.getDistance()))
+			{
+				roboAtual = e;
+			}else{
+				for(ScannedRobotEvent robo  : listaRobosAchados){				
 				  if (roboAtual.getDistance() > robo.getDistance() ){
 					  roboAtual = robo;					  
 				  }
+				}
 			}
+
+			
 		}	
 
 		setTurnRadarLeftRadians(getRadarTurnRemainingRadians());		
