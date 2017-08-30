@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import robocode.*;
 import java.io.Writer;
 
-public class Teste extends AdvancedRobot {
+public class Zeta extends AdvancedRobot {
 	
 	ArrayList< ScannedRobotEvent > listaRobosAchados = new ArrayList< ScannedRobotEvent >();
 	ScannedRobotEvent roboMenorDistancia;
